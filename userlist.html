@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="third/amazeui/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="third/amazeui/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+    <link rel="stylesheet" href="third/amazeui/css/amazeui.datatables.min.css" /> 
+    <link rel="stylesheet" href="third/amazeui/css/app.css">
+    <script src="third/amazeui/js/jquery.min.js"></script>
+</head>
+
+<body data-type="widgets">
+    <script src="third/amazeui/js/theme.js"></script>
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">用户列表</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                                    <div class="am-form-group">
+                                        <div class="am-btn-toolbar">
+                                            <div class="am-btn-group am-btn-group-xs">
+                                                <button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                                                <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
+                                                <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
+                                                <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+                                    <div class="am-form-group tpl-table-list-select">
+                                        <select data-am-selected="{btnSize: 'sm'}">
+                                          <option value="option1">所有类别</option>
+                                          <option value="option2">IT业界</option>
+                                          <option value="option3">数码产品</option>
+                                          <option value="option3">笔记本电脑</option>
+                                          <option value="option3">平板电脑</option>
+                                          <option value="option3">只能手机</option>
+                                          <option value="option3">超极本</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
+                                    <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+                                        <input type="text" class="am-form-field" id="username">
+                                        <input type="text" class="am-form-field" id="delflag">
+                                        <span class="am-input-group-btn">
+                                            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button" id="btn_search"></button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="am-u-sm-12">                
+                                    <table id="tableId" style="text-align:center" class="am-table am-table-compact am-table-striped tpl-table-black"> </table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div> 
+
+            
+            </div>
+            
+   
+
+    
+    <script type="text/javascript" charset="utf8" src="third/DataTables-1.10.18/js/jquery.dataTables.js"></script>
+    <script src="third/amazeui/js/amazeui.datatables.min.js"></script>
+    <script src="third/amazeui/js/amazeui.min.js"></script>
+    <script src="third/amazeui/js/app.js"></script>
+     <script type="application/javascript" src="ajaxStep.js"></script>
+    <script>
+        //引用了上面的js文件后，在这里设置其他的参数
+        //ajax的url
+        window.dataTablesSettings.ajax = {
+                    url: '/apis/v1/user/getUser',
+                    type: 'post',
+                    cache: false,  //禁用缓存
+                    contentType: "application/json",
+                    data : function(d){
+                        var pageParam = {};  
+                        pageParam.pageSize = d.length;
+                        pageParam.pageIndex = (d.start / d.length)+1;//当前页码
+                        //pageParam.offset = d.start;//开始的记录序号
+                        return JSON.stringify(pageParam);
+                    },
+                    dataFilter : function(json){
+                        //后台返回字段不同于前台，使用此属性进行修改
+                        console.log(json)
+                        json = JSON.parse(json);
+                        var page = json.page;
+                        var returnData = {};
+                        returnData.recordsTotal = page.RecordCount;  //返回数据全部记录  
+                        returnData.recordsFiltered = page.RecordCount;  //后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.data = json.data;  //返回的数据列表
+                        return JSON.stringify(returnData); //这几个参数都是datatable需要的，必须要
+                    }
+                };
+        //设置具体的列名
+        window.dataTablesSettings.columns = [
+            { data: "id", title:"id", width:"10%" },
+            { data: "handimg", title:'头像', width:"10%", render: function(data,type,row,meta){ return '<img src="third/amazeui/img/k.jpg" class="tpl-table-line-img" alt="">';}},
+            { data: "username", title:"用户名", width:"30%" },
+            { data: "delflag", title:"是否删除", width:"30%", render:function(data,type,row,meta){return data == 1 ? "是" : "否";} },
+            { data: "id", title:"操作", width:"30%", 
+                render:function(data,type,row,meta){
+                    return  '<div class="tpl-table-black-operation">' + 
+                                '<a href="javascript:;">' +
+                                    '<i class="am-icon-pencil"></i> 编辑' +
+                                '</a>' +
+                                '<a href="javascript:;" class="tpl-table-black-operation-del">' +
+                                    '<i class="am-icon-trash"></i> 删除' +
+                                '</a>' +
+                            '</div>';
+                } 
+            } 
+        ];
+        var table = $('#tableId').DataTable(window.dataTablesSettings);
+
+
+
+//这里是搜索的案例，不过自定义分页也可以这么做
+$("#btn_search").on("click", function(){
+    //这里是为了解决搜索条件变化后，没有点搜索按钮，而是点换页后搜索条件也变化的bug
+    var username = $("#username").val();
+    var delflag = $("#delflag").val();
+    
+    //这里重新设置参数
+    window.dataTablesSettings.serverParams = function (aoData) {
+        aoData.username = username;
+        aoData.delflag = delflag;
+        aoData._rand = Math.random();
+    }
+    //搜索就是设置参数，然后销毁datatable重新再建一个
+    table.destroy(true);
+    table = $("#datatable").dataTable(window.dataTablesSettings);
+    //搜索后跳转到第一页
+    table.fnPageChange(0);
+});
+        
+    
+        
+
+
+
+        $("#searchButton").click(function(){
+            table.ajax.reload(null,false); // 刷新表格数据，分页信息不会重置                         
+            table.draw(false);
+        }); 
+                
+        $("#clearSearchButton").click(function(){
+            $("#userName").val(""); 
+            $("#userCode").val("");
+            $("#status").val("");
+        });
+
+        
+        //表格——》鼠标高亮显示
+        $('#tableId tbody').on('mouseover', 'tr', function () {
+            if (!$(this).hasClass('badao_hoverd') ) {
+                $(this).addClass('badao_hoverd');
+            }
+        } ).on('mouseleave', 'tr', function () {
+            if ($(this).hasClass('badao_hoverd') ) {
+                $(this).removeClass('badao_hoverd');
+            }
+        } );
+        //DataTable 行点击事件，用来设置样式点击事件
+        $('#tableId tbody').on('click', 'tr', function () {
+        if (!$(this).hasClass('selected') ) {
+          t.$('tr.selected').removeClass('selected');
+          $(this).addClass('selected');
+        }
+      } );                  
+    </script>
+</body>
+
+</html>

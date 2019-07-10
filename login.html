@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+	.layui-layer-content layui-layer-padding{
+		margin-left: 50px
+	}
+	label.error {
+		color: red;	
+		font-weight: normal;
+		text-align: left;
+	} 
+	input {
+		border-style: none;
+		resize: none;
+		outline: none;
+		background: white;
+		width: 245px;
+		height: 32px;
+		color: #4f4f4f;
+	}
+	*{margin: 0;padding: 0;}
+	.login-banner {
+			width: 100%;
+		height: 750px;
+		font-size: 0;
+		overflow: hidden;
+		text-align: center;
+	}
+	.login-containe {
+		width:392px;
+		text-align:center;
+		display:inline-block; 
+		background-color:white;
+		overflow: hidden;
+		position:absolute;
+		right: 400px;
+		top:245px;
+		background: rgba(255, 255, 255, 0.35);
+	}
+	.login-container-1 {
+			height: 100%; 
+			display:inline-block; 
+			overflow: hidden;
+	}
+	.welcome {
+		width: 350px;
+		height: 48px;
+		margin: -12px auto 0 auto;
+		line-height: 48px;
+		text-align: center;
+		font-size: 20px;
+		color: #fff;
+		background: -webkit-linear-gradient(left, #007738 ,#3fcfd4 , #6282f5); /* Safari 5.1 - 6.0 */
+	    background: -o-linear-gradient(right, #007738 ,#3fcfd4 , #6282f5); /* Opera 11.1 - 12.0 */
+	    background: -moz-linear-gradient(right,#007738 ,#3fcfd4 , #6282f5); /* Firefox 3.6 - 15 */
+	    background: linear-gradient(to right, #007738 ,#3fcfd4 , #6282f5); /* 标准的语法（必须放在最后） */
+		border-radius: 4px 4px 0px 0px;
+	}
+	.login {
+		width: 270px;
+		margin:40px auto;
+		font-size: 15px;
+		filter: alpha(opacity=100);  
+		-moz-opacity:1;  
+		opacity: 1; 
+	}
+	.input-container {
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		position: relative;
+		margin-bottom: 15px;
+		background: white
+	}
+	.login-icon {
+		height: 20px;
+		top: 50%;
+		margin-top: -10px;
+		left: 10px;
+		position: absolute;
+	}
+	.login-input {
+		/* margin-left: 40px; */
+	}
+	.warning-tip {
+		color: #FF5455;
+		font-size: 12px;
+	}
+	.login-btn {
+		width: 100%;
+		height: 36px;
+		margin: 0px 0 0 0;
+		line-height: 36px;
+		text-align: center;
+		font-size: 17px;
+		color: #fff;
+		background: -webkit-linear-gradient(left, #007738 ,#3fcfd4 , #6282f5); /* Safari 5.1 - 6.0 */
+	    background: -o-linear-gradient(right, #007738 ,#3fcfd4 , #6282f5); /* Opera 11.1 - 12.0 */
+	    background: -moz-linear-gradient(right,#007738 ,#3fcfd4 , #6282f5); /* Firefox 3.6 - 15 */
+	    background: linear-gradient(to right, #007738 ,#3fcfd4 , #6282f5); /* 标准的语法（必须放在最后）*/
+		border-radius: 3px;
+		cursor: pointer;
+	}
+	body{
+			/*background: url(login-4.png); */
+		background: url('images/bg-pingtai.jpg') no-repeat;
+		background-size: 100%;
+		text-align: center;
+		
+	}
+	.login-title-1{
+		text-align: left;
+		padding: 5px 0;
+		color: #4f4f4f;
+	}
+	.login-title-2{
+		text-align: left;
+		padding: 5px 0;
+		color: #4f4f4f;
+	}
+	svg {
+	 width: 30%;
+	 height: 30%;
+	 visibility: hidden;
+  		 z-index: 999;
+  		 position:absolute;
+  		 left: 135px;
+ 			 top: 55px;
+ 			 display: none;
+	}
+	.dotting {
+	    display: inline-block; width: 10px; min-height: 2px;
+	    padding-right: 2px;
+	    border-left: 2px solid currentColor; border-right: 2px solid currentColor;   
+	    background-color: currentColor; background-clip: content-box;
+	    box-sizing: border-box;
+	    animation: dot 2s infinite step-start both;
+	    *zoom: expression(this.innerHTML = '...'); /* IE7 */
+	}
+	.dotting:before { content: '...'; } /* IE8 */
+	.dotting::before { content: ''; }
+	:root .dotting { margin-left: 2px; padding-left: 2px; } /* IE9+ */
+	
+	@keyframes dot {
+	    25% { border-color: transparent; background-color: transparent; }          /* 0个点 */
+	    50% { border-right-color: transparent; background-color: transparent; }    /* 1个点 */
+	    75% { border-right-color: transparent; }                                   /* 2个点 */
+	}
+	input:-webkit-autofill{
+		/*使用足够大的纯色内阴影覆盖黄色背景*/
+		-webkit-box-shadow: 0 0 0 1000px white inset;  
+	}
+	.layui-layer-title {
+    	padding: 0;
+    }
+    
+	/* .layui-layer-btn0,.layui-layer-btn1{
+		text-align: center;
+		width:30%
+	} */
+</style>
+</head>
+<body>
+	<div class="login-banner" style="width:1200px;   margin: 0px auto;position: relative;" >
+
+		
+		 <div class="login-containe" >
+		
+			<div class="login">
+			<svg style="display: none" id="loading" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+			  <defs>
+			   <line class="mark" x1="0" y1="0" x2="0" y2="0" fill="none" stroke="#5BB4D8" stroke-miterlimit="10" stroke-linecap="none" stroke-width="12"/>
+			   </defs>
+			 	<g class="container1"/>
+			 	<g class="container2"/>
+			</svg>
+				<form id="form" role="form" action="${ctx}/login" method="POST">
+				<input type='hidden' name="url" value="${url }">
+					<div class="input-container">
+						<img src="images/yonghu.png" >
+						<input id="username" class="login-input" name="username"
+							type="text" value="admin" autofocus />
+					</div>
+					<div class="input-container">
+						<img style="width: 10px" src="images/mima.png" >
+						<input id="password" class="login-input" name="password" type="password" autocomplete="on"/> 
+					</div>
+					<div>
+						<input type='hidden' id="error"  value="${error}">
+					</div>
+					<div id="loginbutton" style="display: block;">
+						<input type="button" value="登录" class="login-btn" onclick="submitForm()"
+							style="width: 270px;background: #2f86d7;margin-right: 30px" />
+					</div>
+					<div id="loginstatus" style="display: none;">
+						<div style="background-color: #6688bc;height: 36px;line-height:36px; width: 270px;font-size: 17px;color: #fff;font-weight: bold;">
+							正在登录<span class="dotting"></span>
+						</div>
+					</div>
+					<div style="color:#082c58;font-weight: bolder;padding-top: 5px;">建议使用<a href="software/70.0.3538.67_chrome_installer.exe" style="text-decoration: underline;">Chrome</a>浏览器访问本系统</div>
+				</form>
+			</div>
+		</div> 
+	</div>
+
+</body>
+
+<script type="application/javascript" src="common.js"></script>
+
+
+
+
+
+<script type="text/javascript">
+	 function submitForm(){
+		// var username= document.getElementById("username").value;
+		 //var password= document.getElementById("password").value;
+	    var username = $("#username").val();
+		var password = $("#password").val(); 
+		if(username==null||username==''){
+			layer.msg('请输入用户名');
+			return false;
+		}
+		if(password==null||password==''){
+			layer.msg('请输入密码');
+			return false;
+		}
+		var version = IEVersion();
+		if(version < 10&&version !=-1){
+			alert("您使用的浏览器版本较低，请使用IE10以上版本或chrome浏览器。");
+			return false;
+		}	
+		/* $("#loading").css('display','block'); */
+		$("#loginbutton").css('display','none');
+		$("#loginstatus").css('display','block');
+		//password = encode64(password);
+	
+		var data = {'username': $("#username").val(), 'password': $("#password").val()};
+
+		$.ajax({
+				type : 'post',
+				url :  "/apis/v1/userLogin/login",
+				data: JSON.stringify(data),
+				contentType: 'application/json;charset=UTF-8',
+				dataType : 'json',
+				async : false,
+				success : function(result) {
+				console.info(result);
+					if(result.code == 0){
+						window.localStorage.setItem('token', result.token)
+						location.href="index.html";
+					}
+					if(result.code == 500){
+						layer.msg(result.msg);
+						$("#loginbutton").css('display','block');
+						$("#loginstatus").css('display','none');
+						return;
+					}
+				},
+				failed : function(result) {
+					console.info(result),
+					alert("failed")
+				
+				}
+		});
+		
+	} 
+	 
+	 //加密
+	 function encode64(input) {
+		 var keyStr = "ABCDEFGHIJKLMNOP" + "QRSTUVWXYZabcdef" + "ghijklmnopqrstuv"
+			+ "wxyz0123456789+/" + "=";
+			var output = "";
+			var chr1, chr2, chr3 = "";
+			var enc1, enc2, enc3, enc4 = "";
+			var i = 0;
+			do {
+				chr1 = input.charCodeAt(i++);
+				chr2 = input.charCodeAt(i++);
+				chr3 = input.charCodeAt(i++);
+				enc1 = chr1 >> 2;
+				enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+				enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+				enc4 = chr3 & 63;
+				if (isNaN(chr2)) {
+					enc3 = enc4 = 64;
+				} else if (isNaN(chr3)) {
+					enc4 = 64;
+				}
+				output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2)
+						+ keyStr.charAt(enc3) + keyStr.charAt(enc4);
+				chr1 = chr2 = chr3 = "";
+				enc1 = enc2 = enc3 = enc4 = "";
+			} while (i < input.length);
+	 
+			return output;
+		}
+	
+	$(function() {
+			
+
+		/** 表单验证  **/
+		/* $("#form").validate({
+			rules : {
+				username : {
+					required : true
+				},
+				password : {
+					required : true
+				}
+			},
+			messages : {
+				username : {
+					required : "请输入账号"
+				},
+				password : {
+					required : "请输入密码"
+				}
+
+			}, */
+			/* errorPlacement: function(error, element) {
+				$("#error").text(error.text());
+			}, */
+			/* submitHandler : function(form) {
+				$.load();
+				form.submit();
+			} 
+		});*/
+
+	});
+
+ 	$(window).load(
+		function() {
+			var height = $(window).height() - $("#dva").outerHeight()
+					- $("#dvb").outerHeight() - $("#dvd").outerHeight();
+			if (height > 0) {
+			$("#dvb").css("margin-top", height * 2 / 5);
+				$("#dvb").css("margin-bottom", height * 3 / 5);
+			}
+			var version = IEVersion();
+			if(version < 10&&version !=-1){
+				alert("您使用的浏览器版本较低，请使用IE10以上版本或chrome浏览器。");
+			}
+		});
+ 	
+ 	//session过期后跳出iframe框架
+ 	$(function(){
+ 		if(window.parent.length>0){ 
+ 	        window.parent.location.href=location.href; 
+ 	    }
+ 	})
+	$("body").keydown(function(e){
+ 		var curKey = e.which;
+ 		if(curKey == 13){
+ 			submitForm();
+ 		}
+	});
+ 	//允许回车提交
+ 	// $("body").keydown(function() {
+     //    if (event.keyCode == "13") {//keyCode=13是回车键
+     //   	 submitForm();
+     //    }
+    // });
+ 	function IEVersion() {
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+            reIE.test(userAgent);
+            var fIEVersion = parseFloat(RegExp["$1"]);
+            if(fIEVersion == 7) {
+                return 7;
+            } else if(fIEVersion == 8) {
+                return 8;
+            } else if(fIEVersion == 9) {
+                return 9;
+            } else if(fIEVersion == 10) {
+                return 10;
+            } else {
+                return 6;//IE版本<=7
+            }   
+        } else if(isEdge) {
+            return 'edge';//edge
+        } else if(isIE11) {
+            return 11; //IE11  
+        }else{
+            return -1;//不是ie浏览器
+        }
+    }
+</script>
+</html>
